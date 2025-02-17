@@ -1,0 +1,63 @@
+/*
+ Theme Name:   Stowe Child for COR2E
+ Description:  Developed by DXG for COR2E
+ Author:       Natalie Lacroix - https://dxgroup.core.uconn.edu
+ Template:     cornerstone
+ Version:      1
+*/
+@import url(../beecher-stowe/css/bs-color-husky-blue.css);
+@import url(../beecher-stowe/css/bs-font-compressed.css);
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+@media (min-width: 768px) {
+    .facilities-wrap {
+        width:100%;
+        grid-template-columns: repeat(auto-fill, 49%);
+        display: grid;
+        justify-content: space-between;
+    }
+}
+
+@media (min-width: 992px) {
+    .facilities-wrap {
+        grid-template-columns: repeat(auto-fill, 32%);
+        display: grid;
+        justify-content: space-between;
+    }
+}
+
+.facilities-wrap.row:before, .facilities-wrap.row:after {
+    display: none;
+}
+
+.facilities-element{
+padding-left:0px;
+padding-right:0px;
+}
+
+/*loading*/
+.htmx-request{
+    opacity:0.5;
+    filter: blur(1px)
+}
+
+.facility-photo-wrap{
+    color:white;
+    display:flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.facility-photo-wrap img{
+    filter: brightness(50%);
+    height:100px;
+    object-fit:cover;
+}
+
+.facility-details{
+    position:absolute;
+}
+
+.facility-details h3{
+    font-weight:400;
+}
