@@ -41,23 +41,62 @@ padding-right:0px;
     filter: blur(1px)
 }
 
-.facility-photo-wrap{
-    color:white;
-    display:flex;
-    justify-content: center;
-    align-items:center;
-}
-
 .facility-photo-wrap img{
     filter: brightness(50%);
     height:100px;
     object-fit:cover;
 }
 
-.facility-details{
-    position:absolute;
+.facility-photo-wrap {
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Ensure positioning is relative to this container */
+    margin-bottom:10px;
 }
 
-.facility-details h3{
-    font-weight:400;
+.facility-details {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 0; /* Start from the left edge */
+    width: 100%; /* Make sure it spans the full width */
+    text-align: center; /* Center text horizontally */
+    transform: translateY(-50%); /* Vertically center it using translate */
+    max-width: 100%; /* Ensure it doesn't overflow the parent container */
+    word-wrap: break-word; /* Break long words to avoid overflow */
+    word-break: break-word; /* Ensures long unbreakable words also wrap */
+    padding: 5px; /* Optional: Adds space around the text */
+}
+
+.facility-details h3 {
+    font-weight: 400;
+    font-size: 16px; /* Set the font size to 16px */
+    margin: 0; /* Remove default margin */
+    white-space: normal; /* Allow wrapping */
+    overflow: hidden; /* Optional: Hide overflow text */
+    text-overflow: ellipsis; /* Optional: Add ellipsis for very long titles */
+}
+
+
+@media (max-width: 767px) {
+    .facility-details {
+        top: 50%; /* Ensure it stays centered */
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+}
+
+
+/*form*/
+.category-filter-dropdown, #facility-search{
+    font-size:16px!important;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+#facility-search:focus{
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
 }

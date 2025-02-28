@@ -6,20 +6,6 @@
 
 get_header(); ?>
 
-
-<?php while (have_posts()) : the_post(); ?>
-
-  <div id="primary" class="content-area">
-    <div id="facility_content">
-      <?php
-      // get page content if any
-      the_content();
-      ?>
-    </div>
-  </div>
-
-<?php endwhile; ?>
-
 <?php
         while (have_posts()) : the_post();
         // get the featured image and caption
@@ -89,33 +75,33 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
 <!-- start custom stuff -->
 
   <section id="facility-area">
-    <div class="row" style="margin: auto;padding:100px 0px;background-image: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 80%),
+    <div class="row" style="margin: auto;padding:100px 0px;background-image: linear-gradient(90deg, rgba(0, 14, 47,0.95) 0%, rgba(0, 14, 47,0.2) 100%),
                     url(<?php echo $facility_photo; ?>);background-repeat:no-repeat;background-size:cover;background-position:center;">
       <div class="container white">
         <div class="col-md-6" style="padding:0px">
-          <?php
-          foreach ($facility_departments as $department) :
-          ?>
-            <div class="" style="text-transform:uppercase;">
-              <small>
-              <?php echo $department['name']; ?>
-              </small>
-            </div>
-              <?php endforeach;?>
+            <h2 style="margin-bottom:0px;font-size:50px;">
+              <?php echo $data['name']; ?>
+            </h2>
               <?php
               foreach ($facility_campuses as $campus) :
               ?>
             <div class="" style="text-transform:uppercase;">
               <small>
+              <svg xmlns="http://www.w3.org/2000/svg" height="10" width="7.5" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ffffff" d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
               <?php echo $campus['name']; ?>
               </small>
             </div>
           <?php endforeach;?>
-          <?php endwhile; ?>
-
-            <h2 style="margin-bottom:0px;font-size:50px;">
-              <?php echo $data['name']; ?>
-            </h2>
+          <?php
+          foreach ($facility_departments as $department) :
+          ?>
+            <div class="" style="text-transform:uppercase;">
+              <small>
+              <svg xmlns="http://www.w3.org/2000/svg" height="10" width="7.5" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ffffff" d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c26.5 0 48-21.5 48-48l0-416c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16z"/></svg>              <?php echo $department['name']; ?>
+              </small>
+            </div>
+            <?php endforeach;?>
+            <?php endwhile; ?>
             <p style="font-size:18px">
               <?php echo $data['short_description']; ?>
             </p>
@@ -126,9 +112,16 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
 
     <div class="row container" style="margin:auto;padding-top:50px;padding-bottom:50px;">
       <div style="display:flex;justify-content:space-between;align-items:end;">
+      <?php if($data['contact1_name']){?>
       <h3>Contacts</h3>
+      <?php } ?>
+      <?php if($data['facility_phone_number']){?>
       <p><strong>Facility Phone Number: </strong><a href="tel:<?php echo $data['facility_phone_number']; ?>"><?php echo $data['facility_phone_number']; ?></a></p>
+      <?php
+        }
+      ?>
       </div>
+      <div class="row">
       <?php
       // Loop through the contact fields (1 to 6)
       for ($i = 1; $i <= 6; $i++) {
@@ -136,28 +129,41 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
           $contact_name = isset($data['contact' . $i . '_name']) ? $data['contact' . $i . '_name'] : '';
           $contact_title = isset($data['contact' . $i . '_title']) ? $data['contact' . $i . '_title'] : '';
           $contact_email = isset($data['contact' . $i . '_email']) ? $data['contact' . $i . '_email'] : ''; 
+          if($contact_name){
       ?>
-              <div class="col-md-4 card" style="padding-left:0px">
+              <div class="col-md-4 card" style="margin-bottom:10px">
+                <div style="padding:20px;background:#F5F5F5;border-left:4px solid #D10026;">
                   <h4 style="margin-bottom:0px"><?php echo $contact_name; ?></h4>
                   <p style="margin-bottom:5px"><?php echo $contact_title; ?></p>
                   <a href="mailto:<?php echo $contact_email; ?>"><?php echo $contact_email; ?></a>
+                </div>
               </div>
+      <?php
+          }}
+      ?>
+      </div>
+    </div>
+
+    <div class="row container" style="margin:auto">
+      <?php if ($data['campus_address']){?>
+      <div class="col-md-6" style="padding-left:0px;padding-top:50px;padding-bottom:50px;">
+        <h3>Campus Address</h3>
+        <p><?php echo $data['campus_address']; ?></p>
+      </div>
+      <?php
+      }
+      ?>
+      <?php if ($data['mailing_address']){?>
+      <div class="col-md-6" style="padding-left:0px;padding-top:50px;padding-bottom:50px;">
+        <h3>Mailing Address</h3>
+        <p><?php echo $data['mailing_address']; ?></p>
+      </div>
       <?php
       }
       ?>
     </div>
 
-    <div class="row container" style="margin:auto;padding-top:50px;padding-bottom:50px;">
-      <div class="col-md-6" style="padding-left:0px">
-        <h3>Campus Address</h3>
-        <p><?php echo $data['campus_address']; ?></p>
-      </div>
-      <div class="col-md-6" style="padding-left:0px">
-        <h3>Mailing Address</h3>
-        <p><?php echo $data['mailing_address']; ?></p>
-      </div>
-    </div>
-
+    <?php if ($data['resource1']){?>
     <div class="row container" style="margin:auto;padding-top:50px;padding-bottom:50px;">
       <h3>Resources</h3>
       <?php
@@ -186,9 +192,32 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
         }
         ?>
     </div>
-      
+    <?php
+      }
+    ?>  
+    <?php if ($data['services']){?>
+      <div class="row container" style="margin:auto;padding-top:50px;padding-bottom:50px">
+      <h3>Services</h3>
+      <p><?php echo $data['services']; ?></p>
+      </div>
+    <?php
+    }
+    ?>
 
   </section>
+
+  <?php while (have_posts()) : the_post(); ?>
+
+  <div id="primary" class="content-area">
+    <div id="facility_content">
+      <?php
+      // get page content if any
+      the_content();
+      ?>
+    </div>
+  </div>
+
+<?php endwhile; ?>
 
   <?php get_footer(); ?>
 

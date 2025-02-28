@@ -41,11 +41,7 @@ if (isset($_GET['campus_filter']) && !empty($_GET['campus_filter'])) {
 
 $facilities = new WP_Query($args);
 
-
-
-
 ?>
-
 
 <div class="row">
     <div class="col-md-12" style="margin-top: 50px;">
@@ -58,9 +54,18 @@ $facilities = new WP_Query($args);
 </div>
 
 <section id="stories-app">
-    <div class="container">
+<div class="">
 
 <div class="row">
+<div class="col-lg-4 stories-filter">
+    <form method="GET" action="" id="category-filter-form" hx-get="" hx-trigger="change" hx-target=".facilities-wrap" hx-select=".facilities-wrap" hx-swap="outerHTML" hx-indicator=".facilities-wrap">
+        <div class="stories-filter-item">
+            <label for="facility-search">Search</label>
+            <input class="form-control" type="text" placeholder="Search by name, service, etc." aria-label=".form-control" id="facility-search">
+        </div>
+    </form>
+</div>
+
 <div class="col-lg-4 stories-filter">
     <form method="GET" action="" id="category-filter-form" hx-get="" hx-trigger="change" hx-target=".facilities-wrap" hx-select=".facilities-wrap" hx-swap="outerHTML" hx-indicator=".facilities-wrap">
         <div class="stories-filter-item">
@@ -135,8 +140,10 @@ $facilities = new WP_Query($args);
     </form>
 </div>
 
+<small class="container" style="margin-bottom:15px;">* Facilities typically serve faculty at all campuses, regardless of their location. If you don't see what you're looking for, trying browsing all facilities or select another campus to narrow down your search results.</small>
+
 </div>
-        <div class="col-lg-12 facilities-wrap row">
+        <div class="facilities-wrap">
             <?php
 
 
@@ -160,7 +167,7 @@ $facilities = new WP_Query($args);
                         <div class="facility-photo-wrap">
                             <img class="story-photo" src="<?php echo $facility_photo; ?>" width="100%" height="100px" 
                             alt="<?php echo $facility_photo_alt; ?>">
-                            <div class="facility-details">
+                            <div class="facility-details white">
                                 <h3><?php echo $name; ?></h3>
                             </div>
                         </div>
