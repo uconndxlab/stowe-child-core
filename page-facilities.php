@@ -55,7 +55,6 @@ $facilities = new WP_Query($args);
 
 <section id="stories-app">
 <div class="">
-
 <div class="row">
 <div class="col-lg-4 stories-filter">
     <form method="GET" action="" id="category-filter-form" hx-get="" hx-trigger="change" hx-target=".facilities-wrap" hx-select=".facilities-wrap" hx-swap="outerHTML" hx-indicator=".facilities-wrap">
