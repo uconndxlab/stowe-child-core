@@ -10,23 +10,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 @media (min-width: 768px) {
-    .facilities-wrap {
+    .facilities-wrap-element {
         width:100%;
         grid-template-columns: repeat(auto-fill, 49%);
         display: grid;
         justify-content: space-between;
+        margin-bottom:20px;
     }
 }
 
 @media (min-width: 992px) {
-    .facilities-wrap {
+    .facilities-wrap-element {
         grid-template-columns: repeat(auto-fill, 32%);
         display: grid;
         justify-content: space-between;
     }
 }
 
-.facilities-wrap.row:before, .facilities-wrap.row:after {
+.facilities-wrap-element.row:before, .facilities-wrap-element.row:after {
     display: none;
 }
 

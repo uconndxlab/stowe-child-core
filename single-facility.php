@@ -134,7 +134,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
           if($contact_name){
       ?>
               <div class="col-md-4 card" style="margin-bottom:10px">
-                <div style="padding:20px;background:#F5F5F5;border-left:4px solid #D10026;">
+                <div style="padding:20px;background:#f0f2f7;border-left:4px solid #D10026;">
                   <h4 style="margin-bottom:0px"><?php echo $contact_name; ?></h4>
                   <p style="margin-bottom:5px"><?php echo $contact_title; ?></p>
                   <a href="mailto:<?php echo $contact_email; ?>"><?php echo $contact_email; ?></a>
@@ -148,7 +148,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
 
     <div class="row container" style="margin:auto">
       <?php if ($data['campus_address']){?>
-      <div class="col-md-6" style="padding-left:0px;padding-top:50px;padding-bottom:50px;">
+      <div class="col-md-6" style="padding-left:0px;padding-top:0px;padding-bottom:50px;">
         <h3>Campus Address</h3>
         <p><?php echo $data['campus_address']; ?></p>
       </div>
@@ -156,7 +156,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
       }
       ?>
       <?php if ($data['mailing_address']){?>
-      <div class="col-md-6" style="padding-left:0px;padding-top:50px;padding-bottom:50px;">
+      <div class="col-md-6" style="padding-left:0px;padding-top:0px;padding-bottom:50px;">
         <h3>Mailing Address</h3>
         <p><?php echo $data['mailing_address']; ?></p>
       </div>
@@ -166,8 +166,9 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
     </div>
 
     <?php if ($data['resource1']){?>
-    <div class="row container" style="margin:auto;padding-top:50px;padding-bottom:50px;">
-      <h3>Resources</h3>
+    <div style="background:#1d305e">
+    <div class="row container" style="margin:auto;padding-top:0px;padding-bottom:50px;padding-top:50px;">
+      <h3 style="color:#fff">Resources</h3>
       <?php
       // Loop through 12 resources
       for ($i = 1; $i <= 12; $i++) {
@@ -178,13 +179,13 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
           // Only display if resource is not empty
           if ($resource) {
       ?>
-              <div class="col-md-12" style="padding-left:0px;margin-bottom:20px;">
-                  <div class="col-md-9" style="padding-left:0px">
+              <div class="col-md-12" style="margin-bottom:20px;background:#fff;padding:20px;box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);">
+                  <div class="col-md-9" style="padding-left:0px;">
                       <h4><?php echo $resource; ?></h4>
                       <p><?php echo strip_tags($description); ?></p>
                   </div>
                   <?php if (!empty($image)): ?>
-                      <div class="col-md-3" style="padding-left:0px">
+                      <div class="col-md-3" style="padding-left:0px;padding-right:0px;">
                           <img class="story-photo gallery-photo" src="<?php echo $image['url']; ?>" alt="<?php echo $image['alt']; ?>" />
                       </div>
                   <?php endif; ?>
@@ -194,13 +195,17 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
         }
         ?>
     </div>
+    </div>
     <?php
       }
     ?>  
     <?php if ($data['services']){?>
-      <div class="row container" style="margin:auto;padding-top:50px;padding-bottom:50px">
-      <h3>Services</h3>
-      <p><?php echo $data['services']; ?></p>
+      <div style="background:#000e2f;border-bottom:4px solid #D10026;">
+      <div class="white row container" style="margin:auto;padding-top:0px;padding-bottom:50px;padding-top:50px;">
+      <h3 >Services</h3>
+      <p style="color:#fff"><?php echo $data['services']; ?></p>
+      <a href="<?php echo $data['homepage']; ?>" target="blank" class="btn btn-primary">Visit Facility Homepage</a>
+      </div>
       </div>
     <?php
     }
