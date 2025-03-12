@@ -102,3 +102,95 @@ function stowe_child_core_enqueue_scripts()
     wp_enqueue_script('htmx', 'https://unpkg.com/htmx.org/dist/htmx.min.js', array(), STOWE_CHILD_CORE, true);
 }
 
+// Register the core facilities shortcode
+function display_core_facilities($atts) {
+    // Parse the attributes and set default values
+    $atts = shortcode_atts(
+        array(
+            'show_name_description' => 'true', // Default to true (show name & description)
+        ),
+        $atts,
+        'core_facilities'
+    );
+
+    // Get the "core" department term
+    $term = get_term_by('slug', 'core', 'department');
+
+    if ($term) {
+        $department_name = $term->name;
+        $department_description = term_description($term->term_id, 'department');
+    }
+
+    // Start building the query arguments
+    $args = array(
+        'post_type' => 'facility',
+        'posts_per_page' => -1,
+        'paged' => get_query_var('paged'),
+    );
+
+    // Filter the query by the current department term
+    $args['tax_query'] = array(
+        array(
+            'taxonomy' => 'department',
+            'field' => 'slug',
+            'terms' => 'core', // display core facilities
+            'operator' => 'IN',
+        ),
+    );
+
+    $facilities = new WP_Query($args);
+
+    ob_start(); // Start output buffering
+
+    ?>
+    <section style="margin:0px 0px">
+        <!-- Conditionally Display the core department name and description -->
+        <?php if (isset($department_name) && isset($department_description) && $atts['show_name_description'] === 'true') : ?>
+            <h2 style="margin-bottom:10px"><?php echo esc_html($department_name); ?> Facilities</h2>
+            <p style="margin-bottom:20px"><?php echo wp_strip_all_tags($department_description); ?></p>
+        <?php endif; ?>
+
+        <div class="facilities-wrap-element">
+            <?php
+            if ($facilities->have_posts()) {
+                while ($facilities->have_posts()) {
+                    $facilities->the_post();
+                    // Get the featured image and caption
+                    $facility_photo = get_the_post_thumbnail_url(get_the_ID(), 'full');
+                    $thumbnail_id = get_post_thumbnail_id($post->ID);
+                    $facility_photo_alt = get_post_meta($thumbnail_id, '_wp_attachment_image_alt', true);
+
+                    $facility_link = get_the_permalink();
+                    // Custom fields
+                    $name = get_field('name');
+            ?>
+
+                    <a class="facilities-element" href="<?php echo esc_url($facility_link); ?>">
+                        <div class="facility-photo-wrap">
+                            <img class="story-photo" src="<?php echo esc_url($facility_photo); ?>" width="100%" height="100px" 
+                            alt="<?php echo esc_attr($facility_photo_alt); ?>">
+                            <div class="facility-details white">
+                                <h3><?php echo esc_html($name); ?></h3>
+                            </div>
+                        </div>
+                    </a>
+
+            <?php
+                }
+                wp_reset_postdata();
+            } else {
+                echo '<p>No facilities found for this department.</p>';
+            }
+            ?>
+
+        </div>
+    </section>
+
+    <?php
+    return ob_get_clean(); // Return the content for the shortcode
+}
+
+// Add the shortcode
+add_shortcode('core_facilities', 'display_core_facilities');
+
+

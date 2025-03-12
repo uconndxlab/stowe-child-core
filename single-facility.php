@@ -79,7 +79,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
                     url(<?php echo $facility_photo; ?>);background-repeat:no-repeat;background-size:cover;background-position:center;">
       <div class="container white">
         <div class="col-md-8" style="padding:0px">
-            <h2 style="margin-bottom:0px;font-size:50px;">
+            <h2 style="margin-bottom:10px;font-size:50px;line-height:54px;">
               <?php echo $data['name']; ?>
             </h2>
             <div style="display:flex;flex-wrap:wrap">
@@ -107,13 +107,15 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
             <p style="font-size:18px">
               <?php echo $data['short_description']; ?>
             </p>
+            <?php if($data['homepage']){?>
             <a href="<?php echo $data['homepage']; ?>" target="blank" class="btn btn-primary">Facility Homepage</a>
+            <?php } ?>
         </div>
       </div>
     </div>
 
     <div class="row container" style="margin:auto;padding-top:50px;padding-bottom:50px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
       <?php if($data['contact1_name']){?>
       <h3>Contacts</h3>
       <?php } ?>
@@ -123,7 +125,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
         }
       ?>
       </div>
-      <div class="row">
+      <div class="row contacts-row">
       <?php
       // Loop through the contact fields (1 to 6)
       for ($i = 1; $i <= 6; $i++) {
@@ -133,8 +135,8 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
           $contact_email = isset($data['contact' . $i . '_email']) ? $data['contact' . $i . '_email'] : ''; 
           if($contact_name){
       ?>
-              <div class="col-md-4 card" style="margin-bottom:10px">
-                <div style="padding:20px;background:#f0f2f7;border-left:4px solid #D10026;">
+              <div class="col-md-4 card" style="margin-bottom:30px">
+                <div style="padding:20px;background:#f0f2f7;border-left:4px solid #D10026;height:100%;">
                   <h4 style="margin-bottom:0px"><?php echo $contact_name; ?></h4>
                   <p style="margin-bottom:5px"><?php echo $contact_title; ?></p>
                   <a href="mailto:<?php echo $contact_email; ?>"><?php echo $contact_email; ?></a>
@@ -182,7 +184,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
               <div class="col-md-12" style="margin-bottom:20px;background:#fff;padding:20px;box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);">
                   <div class="col-md-9" style="padding-left:0px;">
                       <h4><?php echo $resource; ?></h4>
-                      <p><?php echo strip_tags($description); ?></p>
+                      <p><?php echo $description; ?></p>
                   </div>
                   <?php if (!empty($image)): ?>
                       <div class="col-md-3" style="padding-left:0px;padding-right:0px;">

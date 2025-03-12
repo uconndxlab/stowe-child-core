@@ -139,16 +139,22 @@ $facilities = new WP_Query($args);
             }
             wp_reset_postdata();
 
-            // Now loop through departments in the order of the dropdown
-            $no_facilities = true; // Flag to track if there are facilities to display
+            // follow order of the dropdown
+            $no_facilities = true; // check if there are facilities to display
             foreach ($department_terms as $department_term) {
                 $slug = $department_term->slug;
                 if (!empty($departments[$slug]['facilities'])) {
-                    $no_facilities = false; // There are facilities to display
+                    $no_facilities = false; // if are facilities to display
                     echo "<div class='department-section' style='margin-bottom:20px;'>";
                     echo "<h3 style='margin-bottom:0px'>{$departments[$slug]['name']}</h3>";
                     echo "<p>{$departments[$slug]['description']}</p>";
                     echo "<div class='facilities-wrap-element'>";
+
+                    // Sort facilities alphabetically by 'name'
+                    usort($departments[$slug]['facilities'], function($a, $b) {
+                        return strcmp($a['name'], $b['name']);
+                    });
+
                     foreach ($departments[$slug]['facilities'] as $facility) {
                         echo "<a class='facilities-element' href='{$facility['link']}'>
                                 <div class='facility-photo-wrap'>
