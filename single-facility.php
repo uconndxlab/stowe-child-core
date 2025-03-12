@@ -76,7 +76,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
 
   <section id="facility-area">
     <div class="row" style="margin: auto;padding:100px 0px;background-image: linear-gradient(90deg, rgba(0, 14, 47,0.95) 0%, rgba(0, 14, 47,0.2) 100%),
-                    url(<?php echo $facility_photo; ?>);background-repeat:no-repeat;background-size:cover;background-position:center;">
+                    url(<?php echo $facility_photo; ?>);background-repeat:no-repeat;background-size:cover;background-position:center;margin-bottom:50px;">
       <div class="container white">
         <div class="col-md-8" style="padding:0px">
             <h2 style="margin-bottom:10px;font-size:50px;line-height:54px;">
@@ -114,7 +114,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
       </div>
     </div>
 
-    <div class="row container" style="margin:auto;padding-top:50px;padding-bottom:50px;">
+    <div class="row container" style="margin:auto;">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
       <?php if($data['contact1_name']){?>
       <h3>Contacts</h3>
@@ -217,7 +217,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
 
   <?php while (have_posts()) : the_post(); ?>
 
-  <div id="primary" class="content-area">
+  <div id="primary" class="content-area container">
     <div id="facility_content">
       <?php
       // get page content if any
