@@ -13,10 +13,13 @@ $department_terms = get_terms(array(
     'order' => 'ASC',     // Ascending order
 ));
 
+$search_query = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
+
 $args = array(
     'post_type' => 'facility',
     'posts_per_page' => -1,
     'paged' => get_query_var('paged'),
+    's' => $search_query,
 );
 
 // Initialize the tax_query
@@ -45,6 +48,18 @@ if (isset($_GET['campus_filter']) && !empty($_GET['campus_filter'])) {
             'operator' => 'IN',
         );
     }
+}
+
+// Add meta_query to search custom fields
+if (!empty($search_query)) {
+    $args['meta_query'] = array(
+        'relation' => 'OR',
+        array(
+            'key' => 'short_description',
+            'value' => $search_query,
+            'compare' => 'LIKE'
+        )
+    );
 }
 
 $facilities = new WP_Query($args);
