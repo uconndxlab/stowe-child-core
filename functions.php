@@ -101,6 +101,12 @@ function stowe_child_core_enqueue_scripts()
 {
     wp_enqueue_script('htmx', 'https://unpkg.com/htmx.org/dist/htmx.min.js', array(), STOWE_CHILD_CORE, true);
 }
+// change post thumbnail size
+function wpdocs_setup_theme() {
+	add_theme_support( 'post-thumbnails' );
+	set_post_thumbnail_size( 300, 300 );
+}
+add_action( 'after_setup_theme', 'wpdocs_setup_theme' );
 
 // Register the core facilities shortcode
 function display_core_facilities($atts) {
@@ -126,6 +132,8 @@ function display_core_facilities($atts) {
         'post_type' => 'facility',
         'posts_per_page' => -1,
         'paged' => get_query_var('paged'),
+        'orderby' => 'name',  // Order alphabetically or adjust as needed
+        'order' => 'ASC',     // Ascending order
     );
 
     // Filter the query by the current department term

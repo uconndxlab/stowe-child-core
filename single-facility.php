@@ -75,7 +75,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
 <!-- start custom stuff -->
 
   <section id="facility-area">
-    <div class="row" style="margin: auto;padding:100px 0px;background-image: linear-gradient(90deg, rgba(0, 14, 47,0.95) 0%, rgba(0, 14, 47,0.2) 100%),
+    <div class="row" style="margin: auto;padding:100px 0px;background-image: linear-gradient(90deg, rgba(0, 14, 47,0.95) 0%, rgba(0, 14, 47,0.4) 100%),
                     url(<?php echo $facility_photo; ?>);background-repeat:no-repeat;background-size:cover;background-position:center;margin-bottom:50px;">
       <div class="container white">
         <div class="col-md-8" style="padding:0px">
@@ -94,14 +94,17 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
                 </div>
               <?php endforeach;?>
               <?php
-              foreach ($facility_departments as $department) :
-              ?>
-                <div class="" style="text-transform:uppercase;width:max-content;">
-                  <small>
-                  <svg xmlns="http://www.w3.org/2000/svg" height="10" width="7.5" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ffffff" d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c26.5 0 48-21.5 48-48l0-416c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16z"/></svg>              <?php echo $department['name']; ?>
-                  </small>
-                </div>
-                <?php endforeach;?>
+                foreach ($facility_departments as $index => $department) :
+                    // Check if the current department is not the last one
+                    $is_last = ($index === array_key_last($facility_departments));
+                ?>
+                    <div class="" style="text-transform:uppercase;width:max-content;<?php echo !$is_last ? 'border-right:1px solid #fff;padding-right:10px;margin-right:10px;' : ''; ?>">
+                        <small>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="10" width="7.5" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#ffffff" d="M48 0C21.5 0 0 21.5 0 48L0 464c0 26.5 21.5 48 48 48l96 0 0-80c0-26.5 21.5-48 48-48s48 21.5 48 48l0 80 96 0c26.5 0 48-21.5 48-48l0-416c0-26.5-21.5-48-48-48L48 0zM64 240c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zm112-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM80 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16zm80 16c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32zM272 96l32 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16z"/></svg>
+                            <?php echo $department['name']; ?>
+                        </small>
+                    </div>
+                <?php endforeach; ?>
                 <?php endwhile; ?>
             </div>
             <p style="font-size:18px">
