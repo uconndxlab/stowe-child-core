@@ -8,12 +8,8 @@ add_action('wp_enqueue_scripts', 'link_parent_theme_style');
 
 define('STOWE_CHILD_CORE', '1.0.0');
 
-
-
-
 function sandc_titlebar_register( $wp_customize ){
-    
-	
+    	
 	// Add color options
 	$wp_customize->add_setting( 'themeColor', //Give it a SERIALIZED name (so all theme settings can live under one db record)
 		array(
@@ -38,7 +34,6 @@ function sandc_titlebar_register( $wp_customize ){
         	)
     	)
 	);
-	
 	
 	 // Add font options
 	$wp_customize->add_section( 'fontStyle', array(
@@ -132,7 +127,7 @@ function display_core_facilities($atts) {
         'post_type' => 'facility',
         'posts_per_page' => -1,
         'paged' => get_query_var('paged'),
-        'orderby' => 'name',  // Order alphabetically or adjust as needed
+        'orderby' => 'name',  // Order by slug (URL name)
         'order' => 'ASC',     // Ascending order
     );
 
@@ -165,7 +160,7 @@ function display_core_facilities($atts) {
                     $facilities->the_post();
                     // Get the featured image and caption
                     $facility_photo = get_the_post_thumbnail_url(get_the_ID(), 'full');
-                    $thumbnail_id = get_post_thumbnail_id($post->ID);
+                    $thumbnail_id = get_post_thumbnail_id(get_the_ID());
                     $facility_photo_alt = get_post_meta($thumbnail_id, '_wp_attachment_image_alt', true);
 
                     $facility_link = get_the_permalink();
@@ -200,5 +195,3 @@ function display_core_facilities($atts) {
 
 // Add the shortcode
 add_shortcode('core_facilities', 'display_core_facilities');
-
-

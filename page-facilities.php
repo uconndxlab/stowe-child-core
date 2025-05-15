@@ -1,6 +1,3 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
 <?php
 /** Facilities Template, page-facilities.php */
 get_header();
@@ -332,9 +329,9 @@ $merged_posts = array_unique($merged_posts, SORT_REGULAR);
         <div class="stories-filter" style="padding:0px">
             <!-- Combined Filter Form -->
             <form method="GET" action="" id="category-filter-form" hx-get="" hx-trigger="change" hx-target=".facilities-wrap" hx-select=".facilities-wrap" hx-swap="outerHTML" hx-indicator=".facilities-wrap">
-                <div class="col-lg-4 stories-filter-item" style="margin-bottom:10px">
+                <div class="col-lg-4 stories-filter-item" style="margin-bottom:10px;">
                     <label for="facility-search">Search</label>
-                    <input class="form-control" type="text" placeholder="Search by name, service, etc." aria-label=".form-control" id="facility-search" name="search" value="<?php echo esc_attr($search_query); ?>">
+                    <input class="form-control" style="min-height:40px" type="text" placeholder="Search by name, service, etc." aria-label=".form-control" id="facility-search" name="search" value="<?php echo esc_attr($search_query); ?>">
                 </div>
 
                 <div class="col-lg-4 stories-filter-item" style="margin-bottom:10px">
