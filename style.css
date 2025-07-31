@@ -146,6 +146,12 @@ padding-right:0px;
     }
 }
 
+@media (max-width: 991px){
+    .contacts-row .card{
+        width:100%;
+    } 
+}
+
 /*form*/
 /* Grid System (row and col-lg-4) */
 .row {

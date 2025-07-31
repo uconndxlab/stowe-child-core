@@ -117,7 +117,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
       </div>
     </div>
 
-    <div class="row container" style="margin:auto;">
+    <div class=" container" style="margin:auto;">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
       <?php if($data['contact1_name']){?>
       <h3>Contacts</h3>
@@ -138,7 +138,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
           $contact_email = isset($data['contact' . $i . '_email']) ? $data['contact' . $i . '_email'] : ''; 
           if($contact_name){
       ?>
-              <div class="col-md-4 card" style="margin-bottom:30px">
+              <div class="col-md-4 card" style="margin-bottom:30px;">
                 <div style="padding:20px;background:#f0f2f7;border-left:4px solid #D10026;height:100%;">
                   <h4 style="margin-bottom:0px"><?php echo $contact_name; ?></h4>
                   <p style="margin-bottom:5px"><?php echo $contact_title; ?></p>
@@ -206,7 +206,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
     ?>  
     <?php if ($data['services']){?>
       <div style="background:#000e2f;border-bottom:4px solid #D10026;">
-      <div class="white row container" style="margin:auto;padding-top:0px;padding-bottom:50px;padding-top:50px;">
+      <div class="white container" style="margin:auto;padding-top:0px;padding-bottom:50px;padding-top:50px;">
       <h3 >Services</h3>
       <p style="color:#fff"><?php echo $data['services']; ?></p>
       <a href="<?php echo $data['homepage']; ?>" target="blank" class="btn btn-primary">Visit Facility Homepage</a>
