@@ -72,16 +72,35 @@ add_action( 'customize_register', 'sandc_titlebar_register' , 34);
 
 function beecher_stowe_scripts() {
 	wp_enqueue_script( 'bs-js', get_stylesheet_directory_uri() . '/js/custom.js', array( 'jquery' ));	
+	
+	// Define allowed stylesheets to prevent path traversal
+	$allowed_color_stylesheets = array(
+		'bs-color-emerald-green',
+		'bs-color-husky-blue',
+		'bs-color-imperial-purple',
+		'bs-color-pumpkin-orange',
+		'bs-color-royal-blue',
+		'bs-color-ruby-red'
+	);
+	
+	$allowed_font_stylesheets = array(
+		'bs-font-book',
+		'bs-font-compressed',
+		'bs-font-plex',
+		'bs-font-sans',
+		'bs-font-serif'
+	);
+	
 	$stylesheet = get_theme_mod('themeColor');
-	if( $stylesheet ){
-		wp_enqueue_style( $stylesheet, get_stylesheet_directory_uri() . '/css/'.$stylesheet.'.css', array('cs-style') );
+	if( $stylesheet && in_array($stylesheet, $allowed_color_stylesheets, true) ){
+		wp_enqueue_style( sanitize_key($stylesheet), get_stylesheet_directory_uri() . '/css/' . sanitize_file_name($stylesheet) . '.css', array('cs-style') );
 	} else {
 		wp_enqueue_style( 'bs-husky-blue', get_stylesheet_directory_uri() . '/css/bs-color-husky-blue.css', array('cs-style') );
 	}
 	
 	$stylesheet = get_theme_mod('fontSelect');
-	if( $stylesheet ){
-		wp_enqueue_style( $stylesheet, get_stylesheet_directory_uri() . '/css/'.$stylesheet.'.css', array('cs-style') );
+	if( $stylesheet && in_array($stylesheet, $allowed_font_stylesheets, true) ){
+		wp_enqueue_style( sanitize_key($stylesheet), get_stylesheet_directory_uri() . '/css/' . sanitize_file_name($stylesheet) . '.css', array('cs-style') );
 	} else {
 		wp_enqueue_style( 'bs-sans', get_stylesheet_directory_uri() . '/css/bs-font-sans.css', array('cs-style') );
 	}

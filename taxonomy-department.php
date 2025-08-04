@@ -48,12 +48,12 @@ $facilities = new WP_Query($args);
                     $name = get_field('name');
             ?>
 
-                    <a class="facilities-element" href="<?php echo $facility_link; ?>">
+                    <a class="facilities-element" href="<?php echo esc_url($facility_link); ?>">
                         <div class="facility-photo-wrap">
-                            <img class="story-photo" src="<?php echo $facility_photo; ?>" width="100%" height="100px" 
-                            alt="<?php echo $facility_photo_alt; ?>">
+                            <img class="story-photo" src="<?php echo esc_url($facility_photo); ?>" width="100%" height="100px" 
+                            alt="<?php echo esc_attr($facility_photo_alt); ?>">
                             <div class="facility-details white">
-                                <h3><?php echo $name; ?></h3>
+                                <h3><?php echo esc_html($name); ?></h3>
                             </div>
                         </div>
                     </a>

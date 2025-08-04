@@ -10,7 +10,52 @@ $department_terms = get_terms(array(
     'order' => 'ASC',     // Ascending order
 ));
 
-$search_query = isset($_GET['search']) ? sanitize_text_field($_GET['search']) : '';
+// Robust input validation and sanitization
+function validate_and_sanitize_search_input($input) {
+    if (empty($input)) {
+        return '';
+    }
+    
+    // Remove potentially dangerous characters and limit length
+    $input = sanitize_text_field($input);
+    $input = trim($input);
+    
+    // Remove SQL wildcards and special characters that could be used maliciously
+    $input = str_replace(array('%', '_', '\\', '"', "'", '<', '>', '&'), '', $input);
+    
+    // Limit search query length to prevent potential DoS attacks
+    if (strlen($input) > 100) {
+        $input = substr($input, 0, 100);
+    }
+    
+    // Only allow alphanumeric characters, spaces, hyphens, and periods
+    $input = preg_replace('/[^a-zA-Z0-9\s\-\.\@]/', '', $input);
+    
+    return $input;
+}
+
+function validate_taxonomy_filter($filter_value, $taxonomy) {
+    if (empty($filter_value) || $filter_value === 'all-departments' || $filter_value === 'all-campuses') {
+        return $filter_value;
+    }
+    
+    // Validate that the term actually exists in the taxonomy
+    $term = get_term_by('slug', $filter_value, $taxonomy);
+    if (!$term) {
+        return '';  // Invalid term, ignore the filter
+    }
+    
+    // Additional validation: ensure slug format
+    if (!preg_match('/^[a-z0-9\-]+$/', $filter_value)) {
+        return '';
+    }
+    
+    return sanitize_key($filter_value);
+}
+
+$search_query = validate_and_sanitize_search_input(isset($_GET['search']) ? $_GET['search'] : '');
+$department_filter = validate_taxonomy_filter(isset($_GET['department_filter']) ? $_GET['department_filter'] : '', 'department');
+$campus_filter = validate_taxonomy_filter(isset($_GET['campus_filter']) ? $_GET['campus_filter'] : '', 'campus');
 
 // First query to search titles and content
 $args1 = array(
@@ -20,88 +65,84 @@ $args1 = array(
     's' => $search_query
 );
 
-// Second query to search meta fields
+// Safer meta query construction with allowed fields validation
+function build_safe_meta_query($search_query) {
+    if (empty($search_query)) {
+        return array();
+    }
+    
+    // Define allowed meta fields to prevent injection attacks
+    $allowed_meta_fields = array(
+        'name',
+        'short_description',
+        'homepage',
+        'facility_phone_number',
+        'contact1_name',
+        'contact1_email',
+        'contact1_title',
+        'contact2_name',
+        'contact2_email',
+        'contact2_title',
+        'contact3_name',
+        'contact3_email',
+        'contact3_title',
+        'contact4_name',
+        'contact4_email',
+        'contact4_title',
+        'contact5_name',
+        'contact5_email',
+        'contact5_title',
+        'contact6_name',
+        'contact6_email',
+        'contact6_title',
+        'campus_address',
+        'mailing_address',
+        'resource1',
+        'description1',
+        'resource2',
+        'description2',
+        'resource3',
+        'description3',
+        'resource4',
+        'description4',
+        'resource5',
+        'description5',
+        'resource6',
+        'description6',
+        'resource7',
+        'description7',
+        'resource8',
+        'description8',
+        'resource9',
+        'description9',
+        'resource10',
+        'description10'
+    );
+    
+    $meta_query = array('relation' => 'OR');
+    
+    foreach ($allowed_meta_fields as $field) {
+        $meta_query[] = array(
+            'key' => $field,
+            'value' => $search_query,
+            'compare' => 'LIKE'
+        );
+    }
+    
+    return $meta_query;
+}
+
+// Second query to search meta fields with validated fields
 $args2 = array(
     'post_type' => 'facility',
     'posts_per_page' => -1,
     'paged' => get_query_var('paged'),
-    'meta_query' => array(
-        'relation' => 'OR',
-        array(
-            'key' => 'name',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'short_description',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'homepage',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'facility_phone_number',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact1_name',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact1_email',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact1_title',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact2_name',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact2_email',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact2_title',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact3_name',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact3_email',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact3_title',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact4_name',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
-        array(
-            'key' => 'contact4_email',
-            'value' => $search_query,
-            'compare' => 'LIKE'
-        ),
+    'meta_query' => build_safe_meta_query($search_query)
+);
+
+// Initialize the tax_query
+$tax_query = array('relation' => 'AND');
+// Validate and apply department filter
         array(
             'key' => 'contact4_title',
             'value' => $search_query,
@@ -278,28 +319,24 @@ $args2 = array(
 // Initialize the tax_query
 $tax_query = array('relation' => 'AND');
 
-// If $_GET['department_filter'] is set, filter by taxonomy terms (department)
-if (isset($_GET['department_filter']) && !empty($_GET['department_filter'])) {
-    if ($_GET['department_filter'] !== 'all-departments') {
-        $tax_query[] = array(
-            'taxonomy' => 'department',
-            'field' => 'slug',
-            'terms' => $_GET['department_filter'],
-            'operator' => 'IN',
-        );
-    }
+// Validate and apply department filter
+if (!empty($department_filter) && $department_filter !== 'all-departments') {
+    $tax_query[] = array(
+        'taxonomy' => 'department',
+        'field' => 'slug',
+        'terms' => $department_filter,
+        'operator' => 'IN',
+    );
 }
 
-// If $_GET['campus_filter'] is set, filter by taxonomy terms (campus)
-if (isset($_GET['campus_filter']) && !empty($_GET['campus_filter'])) {
-    if ($_GET['campus_filter'] !== 'all-campuses') {
-        $tax_query[] = array(
-            'taxonomy' => 'campus',
-            'field' => 'slug',
-            'terms' => $_GET['campus_filter'],
-            'operator' => 'IN',
-        );
-    }
+// Validate and apply campus filter
+if (!empty($campus_filter) && $campus_filter !== 'all-campuses') {
+    $tax_query[] = array(
+        'taxonomy' => 'campus',
+        'field' => 'slug',
+        'terms' => $campus_filter,
+        'operator' => 'IN',
+    );
 }
 
 // Add tax_query to both args1 and args2
@@ -337,12 +374,12 @@ $merged_posts = array_unique($merged_posts, SORT_REGULAR);
                 <div class="col-lg-4 stories-filter-item" style="margin-bottom:10px">
                     <label for="department-select">Department</label>
                     <select name="department_filter" id="department-select" class="form-select form-select-lg category-filter-dropdown">
-                        <option value="all-departments" <?php echo (empty($_GET['department_filter']) || $_GET['department_filter'] == 'all-departments') ? 'selected' : ''; ?>>All Departments</option>
+                        <option value="all-departments" <?php echo (empty($department_filter) || $department_filter == 'all-departments') ? 'selected' : ''; ?>>All Departments</option>
                         <?php
                         foreach ($department_terms as $term) {
                             $term_slug = $term->slug;
                             $term_name = $term->name;
-                            $is_selected = (isset($_GET['department_filter']) && $_GET['department_filter'] == $term_slug) ? 'selected' : '';
+                            $is_selected = ($department_filter == $term_slug) ? 'selected' : '';
                             ?>
                             <option value="<?php echo esc_attr($term_slug); ?>" <?php echo $is_selected; ?>>
                                 <?php echo esc_html($term_name); ?>
@@ -354,7 +391,7 @@ $merged_posts = array_unique($merged_posts, SORT_REGULAR);
                 <div class="col-lg-4 stories-filter-item" style="margin-bottom:10px">
                     <label for="campus-select">Campus</label>
                     <select name="campus_filter" id="campus-select" class="form-select form-select-lg category-filter-dropdown">
-                        <option value="all-campuses" <?php echo (empty($_GET['campus_filter']) || $_GET['campus_filter'] == 'all-campuses') ? 'selected' : ''; ?>>All Campuses</option>
+                        <option value="all-campuses" <?php echo (empty($campus_filter) || $campus_filter == 'all-campuses') ? 'selected' : ''; ?>>All Campuses</option>
                         <?php
                         $args = array(
                             'taxonomy' => 'campus',
@@ -364,7 +401,7 @@ $merged_posts = array_unique($merged_posts, SORT_REGULAR);
                         foreach ($terms as $term) {
                             $term_slug = $term->slug;
                             $term_name = $term->name;
-                            $is_selected = (isset($_GET['campus_filter']) && $_GET['campus_filter'] == $term_slug) ? 'selected' : '';
+                            $is_selected = ($campus_filter == $term_slug) ? 'selected' : '';
                             ?>
                             <option value="<?php echo esc_attr($term_slug); ?>" <?php echo $is_selected; ?>>
                                 <?php echo esc_html($term_name); ?>
@@ -437,11 +474,11 @@ $merged_posts = array_unique($merged_posts, SORT_REGULAR);
                         });
 
                         foreach ($departments[$slug]['facilities'] as $facility) {
-                            echo "<a class='facilities-element' href='{$facility['link']}'>
+                            echo "<a class='facilities-element' href='" . esc_url($facility['link']) . "'>
                                     <div class='facility-photo-wrap'>
-                                        <img class='story-photo' src='{$facility['photo']}' width='100%' height='100px' alt='{$facility['alt']}'>
+                                        <img class='story-photo' src='" . esc_url($facility['photo']) . "' width='100%' height='100px' alt='" . esc_attr($facility['alt']) . "'>
                                         <div class='facility-details white'>
-                                            <h3>{$facility['name']}</h3>
+                                            <h3>" . esc_html($facility['name']) . "</h3>
                                         </div>
                                     </div>
                                 </a>";
