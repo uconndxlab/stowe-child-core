@@ -108,7 +108,8 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
                 <?php endwhile; ?>
             </div>
             <p style="font-size:18px">
-              <?php echo esc_html($data['short_description']); ?>
+                  
+                <?php echo wp_kses_post($data['short_description']); ?>
             </p>
             <?php if($data['homepage']){?>
             <a href="<?php echo esc_url($data['homepage']); ?>" target="blank" class="btn btn-primary">Facility Homepage</a>
