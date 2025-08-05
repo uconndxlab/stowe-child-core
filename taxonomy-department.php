@@ -1,6 +1,11 @@
 <?php
-
 /** Department Template, taxonomy-department.php */
+
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 get_header();
 
 // Get the current term object from the URL (this is specific to the taxonomy page)

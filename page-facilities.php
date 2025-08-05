@@ -1,5 +1,11 @@
 <?php
 /** Facilities Template, page-facilities.php */
+
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 get_header();
 
 // Get terms in the order you want for the department

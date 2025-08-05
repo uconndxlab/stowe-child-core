@@ -1,5 +1,11 @@
 <?php
 /** Workshops Template, page-workshop.php */
+
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 get_header();
 
 // First query to search titles and content

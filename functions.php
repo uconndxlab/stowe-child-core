@@ -115,6 +115,27 @@ function stowe_child_core_enqueue_scripts()
 {
     wp_enqueue_script('htmx', 'https://unpkg.com/htmx.org/dist/htmx.min.js', array(), STOWE_CHILD_CORE, true);
 }
+
+// Add Content Security Policy for HTMX
+function stowe_child_core_add_csp_headers() {
+    // Add CSP headers on pages that use HTMX or inline JavaScript
+    if (is_page('facilities') || is_page('workshops') || is_singular('facility') || is_singular('workshop') || is_tax('department')) {
+        // Generate a unique nonce for this request
+        $nonce = wp_create_nonce('inline_script_nonce');
+        
+        // Store nonce in global for use in templates
+        $GLOBALS['csp_nonce'] = $nonce;
+        
+        // Add CSP header with nonce support
+        header("Content-Security-Policy: script-src 'self' 'nonce-{$nonce}' https://unpkg.com https://unpkg.com/htmx.org/; object-src 'none'; base-uri 'self';");
+    }
+}
+add_action('send_headers', 'stowe_child_core_add_csp_headers');
+
+// Helper function to get the current nonce
+function stowe_child_core_get_nonce() {
+    return isset($GLOBALS['csp_nonce']) ? $GLOBALS['csp_nonce'] : wp_create_nonce('inline_script_nonce');
+}
 // change post thumbnail size
 function wpdocs_setup_theme() {
 	add_theme_support( 'post-thumbnails' );
