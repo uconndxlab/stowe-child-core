@@ -239,6 +239,6 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
   <?php get_footer(); ?>
 
   <!--get rid of default container-->
-  <script nonce="<?php echo esc_attr(stowe_child_core_get_nonce()); ?>">
+  <script>
     document.getElementById('content').firstElementChild.classList.remove('container');
   </script>

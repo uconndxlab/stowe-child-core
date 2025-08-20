@@ -1,5 +1,5 @@
 <?php
-require_once('inc/acf.php');
+
 function link_parent_theme_style()
 {
     wp_enqueue_style('parent-style', get_template_directory_uri() . '/style.css');
@@ -71,7 +71,7 @@ add_action( 'customize_register', 'sandc_titlebar_register' , 34);
 
 
 function beecher_stowe_scripts() {
-	wp_enqueue_script( 'bs-js', get_stylesheet_directory_uri() . '/js/custom.js', array( 'jquery' ));	
+    //wp_enqueue_script( 'bs-js', get_template_directory_uri() . '/js/custom.js', array( 'jquery' ));
 	
 	// Define allowed stylesheets to prevent path traversal
 	$allowed_color_stylesheets = array(
@@ -116,21 +116,7 @@ function stowe_child_core_enqueue_scripts()
     wp_enqueue_script('htmx', 'https://unpkg.com/htmx.org/dist/htmx.min.js', array(), STOWE_CHILD_CORE, true);
 }
 
-// Add Content Security Policy for HTMX
-function stowe_child_core_add_csp_headers() {
-    // Add CSP headers on pages that use HTMX or inline JavaScript
-    if (is_page('facilities') || is_page('workshops') || is_singular('facility') || is_singular('workshop') || is_tax('department')) {
-        // Generate a unique nonce for this request
-        $nonce = wp_create_nonce('inline_script_nonce');
-        
-        // Store nonce in global for use in templates
-        $GLOBALS['csp_nonce'] = $nonce;
-        
-        // Add CSP header with nonce support
-        header("Content-Security-Policy: script-src 'self' 'nonce-{$nonce}' https://unpkg.com https://unpkg.com/htmx.org/; object-src 'none'; base-uri 'self';");
-    }
-}
-add_action('send_headers', 'stowe_child_core_add_csp_headers');
+add_action('wp_enqueue_scripts', 'beecher_stowe_scripts');
 
 // Helper function to get the current nonce
 function stowe_child_core_get_nonce() {
