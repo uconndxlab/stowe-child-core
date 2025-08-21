@@ -1,4 +1,5 @@
 <?php
+include('inc/acf.php');
 
 function link_parent_theme_style()
 {
