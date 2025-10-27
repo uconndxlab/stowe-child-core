@@ -177,8 +177,56 @@ $args2['tax_query'] = $tax_query;
 $query1 = new WP_Query($args1);
 $query2 = new WP_Query($args2);
 
-// Merge the results
-$merged_posts = array_merge($query1->posts, $query2->posts);
+// --- Third query: Search by tags (post_tag) ---
+$query3 = null;
+if (!empty($search_query)) {
+    // Find matching tags first (looser match)
+    $matching_tags = get_terms(array(
+        'taxonomy'   => 'post_tag',
+        'hide_empty' => false,
+        'name__like' => $search_query,
+    ));
+
+    $tag_slugs = wp_list_pluck($matching_tags, 'slug');
+
+    if (!empty($tag_slugs)) {
+        $args3 = array(
+            'post_type'      => 'facility',
+            'posts_per_page' => -1,
+            'paged'          => get_query_var('paged'),
+            'tax_query'      => array(
+                'relation' => 'AND',
+                // Match tag names (slugs)
+                array(
+                    'taxonomy' => 'post_tag',
+                    'field'    => 'slug',
+                    'terms'    => $tag_slugs,
+                    'operator' => 'IN',
+                ),
+            ),
+        );
+
+        // Include department and campus filters if they’re active
+        if (!empty($tax_query) && count($tax_query) > 1) {
+            foreach ($tax_query as $tx) {
+                // Avoid re-adding the relation key
+                if (is_array($tx) && isset($tx['taxonomy'])) {
+                    $args3['tax_query'][] = $tx;
+                }
+            }
+        }
+
+        $query3 = new WP_Query($args3);
+    }
+}
+
+// --- Merge all results together ---
+$merged_posts = array_merge(
+    $query1->posts,
+    $query2->posts,
+    $query3 ? $query3->posts : array()
+);
+
 
 // Remove duplicate posts
 $merged_posts = array_unique($merged_posts, SORT_REGULAR);
