@@ -25,7 +25,7 @@ $args1 = array(
 
 <section id="stories-app">
 
-    <h1>Workshops</h1>
+    <h1>Workshops & Events</h1>
 
     <div class="workshop-wrap">
         <?php
