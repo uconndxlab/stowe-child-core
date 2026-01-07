@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: BioSupply Page
- * Description: BioSupply pages pulling header from ACF page ID 318 with SVGs and fail-safe ACF logic.
+ * Description: BioSupply pages pulling header from ACF page ID 376 with SVGs and fail-safe ACF logic.
  */
 
 get_header();
@@ -9,7 +9,7 @@ get_header();
 /**
  * Facility ACF page ID
  */
-$facility_page_id = 318;
+$facility_page_id = 376;
 
 /**
  * Get ACF fields safely

@@ -222,3 +222,111 @@ function display_core_facilities($atts) {
 
 // Add the shortcode
 add_shortcode('core_facilities', 'display_core_facilities');
+
+/**
+ * Workshops Shortcode
+ * Usage:
+ * [workshops category="slug1,slug2" limit="3" upcoming="true"]
+ */
+function workshops_shortcode($atts) {
+
+    // Shortcode attributes
+    $atts = shortcode_atts(array(
+        'category' => '',
+        'limit'    => -1,
+        'upcoming' => 'false',
+    ), $atts);
+
+    // Sanitize limit
+    $limit = intval($atts['limit']);
+    if ($limit === 0) {
+        $limit = -1;
+    }
+
+    // Convert category string to array
+    $categories = array_map('trim', explode(',', $atts['category']));
+
+    // Base query args
+    $args = array(
+        'post_type'      => 'workshop',
+        'posts_per_page' => $limit,
+        'meta_key'       => 'date',
+        'orderby'        => 'meta_value',
+        'order'          => 'ASC', // upcoming makes more sense ascending
+        'meta_type'      => 'DATE',
+    );
+
+    // Taxonomy filter
+    if (!empty($atts['category'])) {
+        $args['tax_query'] = array(
+            array(
+                'taxonomy' => 'category',
+                'field'    => 'slug',
+                'terms'    => $categories,
+            ),
+        );
+    }
+
+    // Upcoming filter (ACF date >= today)
+    if ($atts['upcoming'] === 'true') {
+        $today = date('Y-m-d');
+
+        $args['meta_query'] = array(
+            array(
+                'key'     => 'date',
+                'value'   => $today,
+                'compare' => '>=',
+                'type'    => 'DATE',
+            ),
+        );
+    }
+
+    $query = new WP_Query($args);
+
+    ob_start();
+
+    if ($query->have_posts()) {
+        echo '<div class="workshop-wrap">';
+
+        while ($query->have_posts()) {
+            $query->the_post();
+
+            $workshop_link  = get_permalink();
+            $workshop_title = get_the_title();
+            $excerpt        = get_field('excerpt');
+            $date           = get_field('date');
+
+            $terms = get_the_terms(get_the_ID(), 'category');
+            $category_names = 'Uncategorized';
+
+            if ($terms && !is_wp_error($terms)) {
+                $term_names = wp_list_pluck($terms, 'name');
+                $category_names = implode(', ', $term_names);
+            }
+            ?>
+
+            <a class="workshop-element" href="<?php echo esc_url($workshop_link); ?>">
+                <div class="workshop-details">
+                    <p class="workshop-category"><?php echo esc_html($category_names); ?></p>
+                    <h2 style="font-size:24px;margin-bottom:0px;">
+                        <?php echo esc_html($workshop_title); ?>
+                    </h2>
+                    <p class="workshop-date"><?php echo esc_html($date); ?></p>
+                    <p class="workshop-excerpt"><?php echo esc_html($excerpt); ?></p>
+                </div>
+            </a>
+
+            <?php
+        }
+
+        echo '</div>';
+        wp_reset_postdata();
+
+    } else {
+        echo '<p>There are no workshops or events at this time. Check back later!</p>';
+    }
+
+    return ob_get_clean();
+}
+
+add_shortcode('workshops', 'workshops_shortcode');

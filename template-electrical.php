@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Electrical Page
- * Description: Electrical pages pulling header from ACF page ID 465 with SVGs and fail-safe ACF logic.
+ * Description: Electrical pages pulling header from ACF page ID 468 with SVGs and fail-safe ACF logic.
  */
 
 get_header();
@@ -9,7 +9,7 @@ get_header();
 /**
  * Facility ACF page ID
  */
-$facility_page_id = 465;
+$facility_page_id = 468;
 
 /**
  * Get ACF fields safely

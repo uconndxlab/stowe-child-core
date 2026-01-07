@@ -144,7 +144,7 @@ $data['services'] = isset($fields['services']) ? $fields['services'] : '';
           if($contact_name){
       ?>
               <div class="col-md-4 card" style="margin-bottom:30px;">
-                <div style="padding:20px;background:#f0f2f7;border-left:4px solid #D10026;height:100%;">
+                <div style="padding:20px;background:#f0f2f7;border-radius:5px;border-left:5px solid #D10026;height:100%;">
                   <h4 style="margin-bottom:0px"><?php echo $contact_name; ?></h4>
                   <p style="margin-bottom:5px"><?php echo $contact_title; ?></p>
                   <a href="mailto:<?php echo $contact_email; ?>"><?php echo $contact_email; ?></a>
